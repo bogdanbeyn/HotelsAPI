@@ -6,7 +6,7 @@ import lombok.Data;
 @Embeddable
 @Data
 public class Address{
-    private String houseNumber;
+    private Long houseNumber;
     private String street;
     private String city;
     private String country;

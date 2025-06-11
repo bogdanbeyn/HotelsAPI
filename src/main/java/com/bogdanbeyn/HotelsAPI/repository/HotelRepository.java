@@ -25,4 +25,16 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
                              @Param("country") String country,
                              @Param("amenities") List<String> amenities);
 
+
+    @Query("SELECT h.brand, COUNT(h) FROM Hotel h GROUP BY h.brand")
+    List<Object[]> getHotelsByBrand();
+
+    @Query("SELECT h.address.city, COUNT(h) FROM Hotel h GROUP BY h.address.city")
+    List<Object[]> getHotelsByCity();
+
+    @Query("SELECT h.address.country, COUNT(h) FROM Hotel h GROUP BY h.address.country")
+    List<Object[]> getHotelsByCountry();
+
+    @Query("SELECT a, COUNT(h) FROM Hotel h JOIN h.amenities a GROUP BY a")
+    List<Object[]> getHotelsByAmenities();
 }

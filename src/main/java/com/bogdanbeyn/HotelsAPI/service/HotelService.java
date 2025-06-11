@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,7 +51,17 @@ public class HotelService {
     }
 
 
+    public Map<String, Long> getHistogram(String param) {
+        List<Object[]> result = switch (param.toLowerCase()) {
+            case "brand" -> hotelRepository.getHotelsByBrand();
+            case "city" -> hotelRepository.getHotelsByCity();
+            case "country" -> hotelRepository.getHotelsByCountry();
+            case "amenities" -> hotelRepository.getHotelsByAmenities();
+            default -> throw new IllegalArgumentException("Unsupported parameter: " + param);
+        };
 
+        return result.stream().collect(Collectors.toMap(r -> (String) r[0], r -> (Long) r[1]));
+    }
 
 
     public HotelDTO convertToSummary(Hotel hotel) {
@@ -63,4 +74,10 @@ public class HotelService {
 
         return new HotelDTO(hotel.getId(), hotel.getName(), hotel.getDescription(), fullAddress, hotel.getContacts().getPhone());
     }
+
+
 }
+
+
+
+
