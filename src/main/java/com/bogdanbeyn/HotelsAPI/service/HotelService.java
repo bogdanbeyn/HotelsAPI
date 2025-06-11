@@ -1,0 +1,66 @@
+package com.bogdanbeyn.HotelsAPI.service;
+
+import com.bogdanbeyn.HotelsAPI.dto.HotelDTO;
+import com.bogdanbeyn.HotelsAPI.entity.Hotel;
+import com.bogdanbeyn.HotelsAPI.repository.HotelRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class HotelService {
+
+    private final HotelRepository hotelRepository;
+
+    public List<Hotel> getAllHotels() {
+        return hotelRepository.findAll();
+    }
+
+    public Hotel createHotel(Hotel hotel) {
+        return hotelRepository.save(hotel);
+    }
+
+    public List<HotelDTO> getHotelSummaries() {
+        List<Hotel> hotels = hotelRepository.findAll();
+        return hotels.stream().map(this::convertToSummary).collect(Collectors.toList());
+    }
+
+    public List<HotelDTO> searchHotels(String name, String brand, String city, String country, List<String> amenities) {
+        return hotelRepository.searchHotels(
+                name != null ? name.toLowerCase() : null,
+                brand != null ? brand.toLowerCase() : null,
+                city != null ? city.toLowerCase() : null,
+                country != null ? country.toLowerCase() : null,
+                amenities != null ? amenities.stream().map(String::toLowerCase).toList() : null
+        ).stream().map(this::convertToSummary).collect(Collectors.toList());
+    }
+
+    public HotelDTO addAmenities(Long id, List<String> amenities) {
+        Hotel hotel = hotelRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Hotel not found with ID: " + id));
+
+        hotel.getAmenities().addAll(amenities);
+        hotelRepository.save(hotel);
+
+        return convertToSummary(hotel);
+    }
+
+
+
+
+
+    public HotelDTO convertToSummary(Hotel hotel) {
+        String fullAddress = String.format("%s %s, %s, %s, %s",
+                hotel.getAddress().getHouseNumber(),
+                hotel.getAddress().getStreet(),
+                hotel.getAddress().getCity(),
+                hotel.getAddress().getCountry(),
+                hotel.getAddress().getPostCode());
+
+        return new HotelDTO(hotel.getId(), hotel.getName(), hotel.getDescription(), fullAddress, hotel.getContacts().getPhone());
+    }
+}

@@ -1,0 +1,18 @@
+server:
+  port: 8092
+spring:
+  application:
+    name: HotelsAPI
+  liquibase:
+    enabled: false
+  datasource:
+    url: jdbc:h2:file:~/hotels_db
+    username: u
+    password: 1
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+  h2:
+    console:
+      enabled: true
