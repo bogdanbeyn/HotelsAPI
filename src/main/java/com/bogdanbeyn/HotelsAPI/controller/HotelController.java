@@ -42,7 +42,8 @@ public class HotelController {
     @PostMapping("/hotels")
     public ResponseEntity<HotelDTO> createHotel(@RequestBody Hotel hotel) {
         Hotel savedHotel = hotelService.createHotel(hotel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(hotelService.convertToSummary(savedHotel));
+        HotelDTO responseDto = hotelService.convertToSummary(savedHotel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @Operation(summary = "Получение списка всех отелей с их краткой информацией по следующим параметрам: name, brand, city, country, amenities")
@@ -61,9 +62,8 @@ public class HotelController {
     public ResponseEntity<Hotel> addAmenities(
             @PathVariable Long id,
             @RequestBody List<String> amenities) {
-        hotelService.addAmenities(id, amenities);
-        return ResponseEntity.status(HttpStatus.OK).body(hotelRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Hotel with id" + id + "not found")));
+        Hotel hotel = hotelService.addAmenities(id, amenities);
+        return ResponseEntity.status(HttpStatus.OK).body(hotel);
     }
 
     @Operation(summary = "Получение количества отелей сгруппированных по каждому значению указанного параметра. Параметр: brand, city, country, amenities.")

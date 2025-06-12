@@ -40,14 +40,14 @@ public class HotelService {
         ).stream().map(this::convertToSummary).collect(Collectors.toList());
     }
 
-    public HotelDTO addAmenities(Long id, List<String> amenities) {
+    public Hotel addAmenities(Long id, List<String> amenities) {
         Hotel hotel = hotelRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Hotel not found with ID: " + id));
 
         hotel.getAmenities().addAll(amenities);
         hotelRepository.save(hotel);
 
-        return convertToSummary(hotel);
+        return hotel;
     }
 
 
