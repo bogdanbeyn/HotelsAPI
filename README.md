@@ -32,5 +32,6 @@ GET /histogram/{params}
  - Spring Boot
  - Spring JPA
  - Liquibase
- - H2
  - Lombok
+
+**Used database:** H2
