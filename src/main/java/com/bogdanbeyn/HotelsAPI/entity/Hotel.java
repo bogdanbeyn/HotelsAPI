@@ -33,5 +33,14 @@ public class Hotel {
 
     @ElementCollection
     private List<String> amenities;
+
+//    public <E> Hotel(long l, String brand, String name, Address address, List<E> amenities, Contacts contacts) {
+//        this.id = l;
+//        this.name = name;
+//        this.brand = brand;
+//        this.address = address;
+//        this.amenities = (List<String>) amenities;
+//        this.contacts = contacts;
+//    }
 }
 
