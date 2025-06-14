@@ -79,7 +79,6 @@ public class HotelControllerTests {
     void whenSearchByCity_thenReturnsFilteredHotels() throws Exception {
         mockMvc.perform(get("/property-view/search?city=Minsk"))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].address", containsString("Minsk")));
     }
