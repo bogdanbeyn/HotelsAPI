@@ -36,3 +36,5 @@ GET /histogram/{params}
  - JUnit
 
 **Used database:** H2
+
+P.s all tests delete all data from the DB and insert their own.
